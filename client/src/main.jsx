@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import App from "./App";
@@ -11,7 +11,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter basename="/Link-Saver-AI">
+    <HashRouter>
       <AuthProvider>
         <ThemeProvider>
           <Toaster
@@ -20,9 +20,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           />
 
           <App />
-
         </ThemeProvider>
       </AuthProvider>
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>
 );
