@@ -52,7 +52,8 @@ Return only the category name.`,
 
       return res.status(500).json({
         success: false,
-        message: data?.error?.message || "OpenRouter request failed",
+        message:
+          data?.error?.message || "OpenRouter request failed",
       });
     }
 
@@ -64,11 +65,102 @@ Return only the category name.`,
       category,
     });
   } catch (error) {
-    console.error("AI ERROR:", error);
+    console.error("AI CATEGORY ERROR:", error);
 
     return res.status(500).json({
       success: false,
       message: "AI category generation failed",
+    });
+  }
+};
+
+
+// ================================
+// Generate Summary
+// ================================
+export const generateSummary = async (req, res) => {
+  try {
+    const { title, description, url } = req.body;
+
+    const apiKey = process.env.OPENROUTER_API_KEY;
+
+    console.log("========== OPENROUTER SUMMARY DEBUG ==========");
+    console.log("Key exists:", Boolean(apiKey));
+    console.log(
+      "Key starts with sk-or:",
+      apiKey?.startsWith("sk-or-")
+    );
+    console.log("Key length:", apiKey?.length);
+
+    if (!apiKey) {
+      return res.status(500).json({
+        success: false,
+        message: "OPENROUTER_API_KEY is missing",
+      });
+    }
+
+    const response = await fetch(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://tusharvis.github.io/Link-Saver-AI/",
+          "X-Title": "Link Saver AI",
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-4o-mini",
+          messages: [
+            {
+              role: "user",
+              content: `Create a short and useful summary for this bookmark.
+
+Title: ${title}
+Description: ${description}
+URL: ${url}
+
+Return only the summary. Keep it concise.`,
+            },
+          ],
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(
+      "OpenRouter summary status:",
+      response.status
+    );
+
+    if (!response.ok) {
+      console.error(
+        "OpenRouter summary response:",
+        data
+      );
+
+      return res.status(500).json({
+        success: false,
+        message:
+          data?.error?.message ||
+          "OpenRouter request failed",
+      });
+    }
+
+    const summary =
+      data.choices?.[0]?.message?.content?.trim();
+
+    return res.json({
+      success: true,
+      summary,
+    });
+  } catch (error) {
+    console.error("AI SUMMARY ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "AI summary generation failed",
     });
   }
 };
