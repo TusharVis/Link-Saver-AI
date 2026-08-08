@@ -1,5 +1,4 @@
--- AlterTable
-ALTER TABLE `bookmark` ADD COLUMN `collectionId` INTEGER NULL;
+ALTER TABLE `Bookmark` ADD COLUMN `collectionId` INTEGER NULL;
 
 -- CreateTable
 CREATE TABLE `Collection` (

@@ -4,10 +4,9 @@ const openrouter = axios.create({
   baseURL: "https://openrouter.ai/api/v1",
 
   headers: {
-    Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+    "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
     "Content-Type": "application/json",
-
-    "HTTP-Referer": "https://link-saver-ai.onrender.com",
+    "HTTP-Referer": "https://tusharvis.github.io/Link-Saver-AI/",
     "X-Title": "Link Saver AI",
   },
 });

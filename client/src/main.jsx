@@ -11,10 +11,9 @@ import { ThemeProvider } from "./context/ThemeContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ThemeProvider>
-        <AuthProvider>
-
+    <BrowserRouter basename="/Link-Saver-AI">
+      <AuthProvider>
+        <ThemeProvider>
           <Toaster
             position="top-right"
             reverseOrder={false}
@@ -22,8 +21,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
           <App />
 
-        </AuthProvider>
-      </ThemeProvider>
+        </ThemeProvider>
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
