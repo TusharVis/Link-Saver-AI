@@ -1,5 +1,3 @@
-import axios from "axios";
-
 export const generateCategory = async (req, res) => {
   try {
     const { title, description } = req.body;
@@ -14,47 +12,59 @@ export const generateCategory = async (req, res) => {
     if (!apiKey) {
       return res.status(500).json({
         success: false,
-        message: "OPENROUTER_API_KEY missing",
+        message: "OPENROUTER_API_KEY is missing",
       });
     }
 
-    const response = await axios.post(
+    const response = await fetch(
       "https://openrouter.ai/api/v1/chat/completions",
       {
-        model: "openai/gpt-4o-mini",
-        messages: [
-          {
-            role: "user",
-            content: `Give one suitable category for this bookmark.
-
-Title: ${title}
-Description: ${description}
-
-Return only the category name.`,
-          },
-        ],
-      },
-      {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${apiKey}`,
           "Content-Type": "application/json",
           "HTTP-Referer": "https://tusharvis.github.io/Link-Saver-AI/",
           "X-Title": "Link Saver AI",
         },
+        body: JSON.stringify({
+          model: "openai/gpt-4o-mini",
+          messages: [
+            {
+              role: "user",
+              content: `Give one suitable category for this bookmark.
+
+Title: ${title}
+Description: ${description}
+
+Return only the category name.`,
+            },
+          ],
+        }),
       }
     );
 
+    const data = await response.json();
+
+    console.log("OpenRouter status:", response.status);
+
+    if (!response.ok) {
+      console.error("OpenRouter response:", data);
+
+      return res.status(500).json({
+        success: false,
+        message: data?.error?.message || "OpenRouter request failed",
+      });
+    }
+
     const category =
-      response.data.choices[0].message.content.trim();
+      data.choices?.[0]?.message?.content?.trim();
 
     return res.json({
       success: true,
       category,
     });
   } catch (error) {
-    console.error("========== OPENROUTER ERROR ==========");
-    console.error("Status:", error.response?.status);
-    console.error("Data:", error.response?.data || error.message);
+    console.error("AI ERROR:", error);
 
     return res.status(500).json({
       success: false,
