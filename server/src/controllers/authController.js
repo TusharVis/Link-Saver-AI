@@ -44,7 +44,6 @@ res.status(201).json({
 };
 
 // Login
-// Login
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -101,6 +100,40 @@ export const login = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Login failed",
+    });
+  }
+};
+
+// Update Profile
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { name, email, image } = req.body;
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        name,
+        email,
+        image,
+      },
+    });
+
+    const { password: _, ...userWithoutPassword } = updatedUser;
+
+    res.json({
+      success: true,
+      message: "Profile updated successfully",
+      user: userWithoutPassword,
+    });
+  } catch (error) {
+    console.error("UPDATE PROFILE ERROR:", error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };

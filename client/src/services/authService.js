@@ -9,3 +9,8 @@ export const register = async (data) => {
   const res = await api.post("/auth/register", data);
   return res.data;
 };
+
+export const updateProfile = async (data) => {
+  const res = await api.put("/auth/profile", data);
+  return res.data;
+};

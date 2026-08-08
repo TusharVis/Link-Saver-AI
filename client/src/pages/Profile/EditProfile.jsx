@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { updateProfile } from "../../services/authService";
 
 function EditProfile() {
   const { user, updateUser } = useAuth();
@@ -28,20 +29,30 @@ function EditProfile() {
   };
 
   // Save Profile
-  const handleSave = () => {
-    const updatedUser = {
-      ...user,
+ const handleSave = async () => {
+  try {
+    const res = await updateProfile({
       name,
       email,
       image,
-    };
+    });
 
-    updateUser(updatedUser);
+    if (res.success) {
+      updateUser(res.user);
 
-    alert("Profile updated successfully!");
+      alert("Profile updated successfully!");
 
-    navigate("/profile");
-  };
+      navigate("/profile");
+    }
+  } catch (error) {
+    console.error("Profile update error:", error);
+
+    alert(
+      error.response?.data?.message ||
+      "Failed to update profile"
+    );
+  }
+};
 
   return (
     <>
