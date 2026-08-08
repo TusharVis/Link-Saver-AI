@@ -10,8 +10,14 @@ const openrouter = axios.create({
 });
 
 openrouter.interceptors.request.use((config) => {
-  config.headers.Authorization =
-    `Bearer ${process.env.OPENROUTER_API_KEY}`;
+  const apiKey = process.env.OPENROUTER_API_KEY;
+
+  console.log(
+    "OpenRouter request - API key available:",
+    Boolean(apiKey)
+  );
+
+  config.headers["Authorization"] = `Bearer ${apiKey}`;
 
   return config;
 });
