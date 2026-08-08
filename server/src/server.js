@@ -2,13 +2,28 @@ import "dotenv/config";
 import app from "./app.js";
 
 console.log(
-  "OpenRouter configured:",
-  Boolean(process.env.OPENROUTER_API_KEY)
+  "DATABASE configured:",
+  Boolean(process.env.DATABASE_URL)
+);
+
+console.log(
+  "DATABASE protocol:",
+  process.env.DATABASE_URL?.split("://")[0]
+);
+
+console.log(
+  "DATABASE host:",
+  process.env.DATABASE_URL?.split("@")[1]?.split("/")[0]
 );
 
 console.log(
   "JWT configured:",
   Boolean(process.env.JWT_SECRET)
+);
+
+console.log(
+  "OpenRouter configured:",
+  Boolean(process.env.OPENROUTER_API_KEY)
 );
 
 const PORT = process.env.PORT || 5000;
