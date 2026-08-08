@@ -7,13 +7,15 @@ console.log(
 );
 
 console.log(
-  "DATABASE protocol:",
-  process.env.DATABASE_URL?.split("://")[0]
+  "DATABASE starts with mysql://:",
+  process.env.DATABASE_URL?.startsWith("mysql://")
 );
 
 console.log(
   "DATABASE host:",
-  process.env.DATABASE_URL?.split("@")[1]?.split("/")[0]
+  process.env.DATABASE_URL
+    ?.split("@")[1]
+    ?.split("/")[0]
 );
 
 console.log(
