@@ -13,18 +13,13 @@ openrouter.interceptors.request.use((config) => {
   const apiKey = process.env.OPENROUTER_API_KEY;
 
   console.log(
-    "OpenRouter request - API key available:",
+    "OpenRouter API key available:",
     Boolean(apiKey)
   );
 
-  config.headers["Authorization"] = `Bearer ${apiKey}`;
+  config.headers.Authorization = `Bearer ${apiKey}`;
 
   return config;
 });
-
-console.log(
-  "OpenRouter configured:",
-  Boolean(process.env.OPENROUTER_API_KEY)
-);
 
 export default openrouter;
