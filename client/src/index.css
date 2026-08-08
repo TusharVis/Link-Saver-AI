@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+/* Required for dark mode in Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #06b6d4;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
