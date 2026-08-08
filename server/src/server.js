@@ -2,7 +2,16 @@ import dotenv from "dotenv";
 import app from "./app.js";
 
 dotenv.config();
-console.log(process.env.JWT_SECRET);
+
+console.log(
+  "OpenRouter configured:",
+  Boolean(process.env.OPENROUTER_API_KEY)
+);
+
+console.log(
+  "JWT configured:",
+  Boolean(process.env.JWT_SECRET)
+);
 
 const PORT = process.env.PORT || 5000;
 
