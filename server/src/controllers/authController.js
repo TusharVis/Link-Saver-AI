@@ -44,10 +44,13 @@ res.status(201).json({
 };
 
 // Login
+// Login
 export const login = async (req, res) => {
   try {
-
     const { email, password } = req.body;
+
+    console.log("Login attempt:", email);
+    console.log("JWT configured:", Boolean(process.env.JWT_SECRET));
 
     const user = await prisma.user.findUnique({
       where: { email },
@@ -60,16 +63,17 @@ export const login = async (req, res) => {
       });
     }
 
-    const match = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
       return res.status(400).json({
         success: false,
         message: "Invalid password",
       });
+    }
+
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET is not configured");
     }
 
     const token = jwt.sign(
@@ -84,16 +88,19 @@ export const login = async (req, res) => {
 
     const { password: _, ...userWithoutPassword } = user;
 
-res.json({
-  success: true,
-  token,
-  user: userWithoutPassword,
-});
-
+    return res.json({
+      success: true,
+      token,
+      user: userWithoutPassword,
+    });
   } catch (error) {
-    res.status(500).json({
+    console.error("LOGIN ERROR:", error);
+    console.error("LOGIN ERROR MESSAGE:", error.message);
+    console.error("LOGIN ERROR STACK:", error.stack);
+
+    return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Login failed",
     });
   }
 };
